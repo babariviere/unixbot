@@ -1,6 +1,7 @@
 # Unixbot
 
-**TODO: Add description**
+A bot to get daily top post from reddit.com/r/unixporn.
+This is created for training and fun only. This is not a serious project in any kind.
 
 ## Installation
 
@@ -18,4 +19,3 @@ end
 Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
 and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
 be found at [https://hexdocs.pm/unixbot](https://hexdocs.pm/unixbot).
-
