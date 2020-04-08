@@ -1,18 +1,17 @@
 defmodule Unixbot do
   @moduledoc """
-  Documentation for `Unixbot`.
+  Unixbot Supervisor.
   """
 
-  @doc """
-  Hello world.
+  use Application
 
-  ## Examples
+  @impl true
+  def start(_type, _args) do
+    children = [
+      Unixbot.Consumer
+    ]
 
-      iex> Unixbot.hello()
-      :world
-
-  """
-  def hello do
-    :world
+    opts = [strategy: :one_for_one]
+    Supervisor.start_link(children, opts)
   end
 end

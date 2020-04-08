@@ -18,6 +18,7 @@ defmodule Unixbot.MixProject do
   # Run "mix help compile.app" to learn about applications.
   def application do
     [
+      mod: {Unixbot, []},
       extra_applications: [:logger]
     ]
   end
@@ -25,6 +26,7 @@ defmodule Unixbot.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
+      {:nostrum, "~> 0.4"},
       {:dialyxir, "~> 1.0", only: [:dev], runtime: false},
       {:credo, "~> 1.3", only: [:dev, :test], runtime: false}
     ]

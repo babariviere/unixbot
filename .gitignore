@@ -24,3 +24,5 @@ unixbot-*.tar
 
 # Ignore elixir ls build files.
 /.elixir_ls/
+
+/config/*.secrets.exs
