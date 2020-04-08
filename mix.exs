@@ -27,6 +27,9 @@ defmodule Unixbot.MixProject do
   defp deps do
     [
       {:nostrum, "~> 0.4"},
+      {:httpoison, "~> 1.6"},
+
+      # Dev dependencies
       {:dialyxir, "~> 1.0", only: [:dev], runtime: false},
       {:credo, "~> 1.3", only: [:dev, :test], runtime: false}
     ]

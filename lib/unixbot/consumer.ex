@@ -1,4 +1,10 @@
 defmodule Unixbot.Consumer do
+  @moduledoc """
+  Consumer of all Discord events.
+
+  Handle all messages and try to give a decent response everytime.
+  """
+
   use Nostrum.Consumer
 
   alias Nostrum.Api

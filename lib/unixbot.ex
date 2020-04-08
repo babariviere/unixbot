@@ -8,7 +8,8 @@ defmodule Unixbot do
   @impl true
   def start(_type, _args) do
     children = [
-      Unixbot.Consumer
+      Unixbot.Consumer,
+      Reddit.TokenServer
     ]
 
     opts = [strategy: :one_for_one]
