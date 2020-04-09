@@ -6,10 +6,10 @@ defmodule Reddit.Listing do
   defstruct [:after, :before, :children]
   @expected_fields ~w(after before children)
 
-  @type t() :: %__MODULE__{
+  @type t(child) :: %__MODULE__{
           after: String.t() | nil,
           before: String.t() | nil,
-          children: list(any())
+          children: list(child)
         }
 
   @doc """
@@ -17,7 +17,7 @@ defmodule Reddit.Listing do
 
   An optional mapper can be given as an argument to map all children.
   """
-  @spec from_json(map(), (any() -> any()) | nil) :: t()
+  @spec from_json(map(), (any() -> any()) | nil) :: t(any())
   def from_json(%{"data" => data, "kind" => "Listing"}, mapper \\ nil) do
     data =
       data

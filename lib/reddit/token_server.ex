@@ -21,7 +21,7 @@ defmodule Reddit.TokenServer do
 
   @impl true
   def init(_) do
-    token = generate_token(self())
+    token = generate_token()
     {:ok, token}
   end
 
@@ -32,11 +32,10 @@ defmodule Reddit.TokenServer do
 
   @impl true
   def handle_info(:refresh, state) do
-    ref = self()
     # generate token in parallel to avoid blocking when getting old one.
     spawn(fn ->
-      token = generate_token(ref)
-      send(ref, {:update, token})
+      token = generate_token()
+      send(@server, {:update, token})
     end)
 
     {:noreply, state}
@@ -49,8 +48,8 @@ defmodule Reddit.TokenServer do
 
   @credentials Application.get_env(:unixbot, :reddit)
 
-  @spec generate_token(pid()) :: String.t() | nil
-  defp generate_token(pid) do
+  @spec generate_token() :: String.t() | nil
+  defp generate_token() do
     params = [
       grant_type: "password",
       username: @credentials[:username],
@@ -76,20 +75,20 @@ defmodule Reddit.TokenServer do
         {:ok, json} = Poison.decode(body)
 
         # send_after expires_in - 1 to still get a valid token during refresh
-        schedule_refresh_token(pid, json["expires_in"] * 999)
+        schedule_refresh_token(json["expires_in"] * 999)
         json["access_token"]
 
       _ ->
         # retry 10 seconds later
-        schedule_refresh_token(pid, 10 * 1000)
+        schedule_refresh_token(10 * 1000)
         nil
     end
   end
 
   @type milliseconds :: non_neg_integer()
 
-  @spec schedule_refresh_token(pid(), milliseconds()) :: no_return()
-  defp schedule_refresh_token(pid, time) do
-    Process.send_after(pid, :refresh, time)
+  @spec schedule_refresh_token(milliseconds()) :: reference()
+  defp schedule_refresh_token(time) do
+    Process.send_after(@server, :refresh, time)
   end
 end
