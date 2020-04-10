@@ -1,18 +1,5 @@
 defmodule Unixbot do
   @moduledoc """
-  Unixbot Supervisor.
+  A bot to get post from subreddit and send them on Discord.
   """
-
-  use Application
-
-  @impl true
-  def start(_type, _args) do
-    children = [
-      Unixbot.Consumer,
-      Reddit.TokenServer
-    ]
-
-    opts = [strategy: :one_for_one]
-    Supervisor.start_link(children, opts)
-  end
 end

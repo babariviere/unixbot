@@ -11,6 +11,14 @@ defmodule Unixbot.MixProject do
       aliases: aliases(),
       dialyzer: [
         plt_file: {:no_warn, "priv/plts/dialyzer.plt"}
+      ],
+
+      # Docs
+      name: "Unixbot",
+      source_url: "https://github.com/babariviere/unixbot",
+      docs: [
+        main: "Unixbot",
+        extras: ["README.md"]
       ]
     ]
   end
@@ -18,7 +26,7 @@ defmodule Unixbot.MixProject do
   # Run "mix help compile.app" to learn about applications.
   def application do
     [
-      mod: {Unixbot, []},
+      mod: {Unixbot.Application, []},
       extra_applications: [:logger]
     ]
   end
@@ -29,6 +37,8 @@ defmodule Unixbot.MixProject do
       {:nostrum, "~> 0.4"},
       {:httpoison, "~> 1.6"},
       {:crontab, "~> 1.1"},
+      {:ecto_sql, "~> 3.0"},
+      {:postgrex, ">= 0.0.0"},
 
       # Dev dependencies
       {:dialyxir, "~> 1.0", only: [:dev], runtime: false},
