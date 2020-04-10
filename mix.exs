@@ -28,6 +28,7 @@ defmodule Unixbot.MixProject do
     [
       {:nostrum, "~> 0.4"},
       {:httpoison, "~> 1.6"},
+      {:crontab, "~> 1.1"},
 
       # Dev dependencies
       {:dialyxir, "~> 1.0", only: [:dev], runtime: false},
@@ -37,7 +38,8 @@ defmodule Unixbot.MixProject do
 
   defp aliases do
     [
-      lint: ["credo", "dialyzer"]
+      lint: ["credo", "dialyzer"],
+      audit: ["hex.audit", "hex.outdated"]
     ]
   end
 end
