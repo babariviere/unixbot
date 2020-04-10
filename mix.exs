@@ -10,7 +10,7 @@ defmodule Unixbot.MixProject do
       deps: deps(),
       aliases: aliases(),
       dialyzer: [
-        plt_add_deps: :transitive
+        plt_file: {:no_warn, "priv/plts/dialyzer.plt"}
       ]
     ]
   end
@@ -32,13 +32,15 @@ defmodule Unixbot.MixProject do
 
       # Dev dependencies
       {:dialyxir, "~> 1.0", only: [:dev], runtime: false},
-      {:credo, "~> 1.3", only: [:dev, :test], runtime: false}
+      {:credo, "~> 1.3", only: [:dev, :test], runtime: false},
+      {:inch_ex, github: "rrrene/inch_ex", only: [:dev, :test]},
+      {:ex_doc, "~> 0.21", only: :dev, runtime: false}
     ]
   end
 
   defp aliases do
     [
-      lint: ["credo", "dialyzer"],
+      lint: ["dialyzer", "credo", "inch"],
       audit: ["hex.audit", "hex.outdated"]
     ]
   end

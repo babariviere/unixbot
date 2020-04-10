@@ -26,3 +26,7 @@ unixbot-*.tar
 /.elixir_ls/
 
 /config/*.secrets.exs
+
+# Dialyxir
+/priv/plts/*.plt
+/priv/plts/*.plt.hash
