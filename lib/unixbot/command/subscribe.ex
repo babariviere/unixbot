@@ -7,7 +7,7 @@ defmodule Unixbot.Command.Subscribe do
   # Parameters
 
   subreddit - the name of the subreddit to subscribe to
-  time - a time to get post every day. format: <hour>:<minute>
+  time - a time to get post every day. format: <hour>h<minute>
   """
 
   use Unixbot.Command
@@ -15,6 +15,22 @@ defmodule Unixbot.Command.Subscribe do
   @admin Application.get_env(:unixbot, :admin_id)
 
   alias Unixbot.Subscription
+
+  @impl true
+  def short_desc(), do: "Subscribe to a subreddit. (admin only)"
+
+  @impl true
+  def desc(),
+    do: """
+    #{short_desc()}
+
+    Usage: subscribe <subreddit> <time>
+
+    # Parameters
+
+    subreddit - the name of the subreddit to subscribe to
+    time - a time to get post every day. format: <hour>h<minute>
+    """
 
   @impl true
   def execute(%Arguments{values: [subreddit, time]}, %Message{author: %User{id: @admin}} = msg) do

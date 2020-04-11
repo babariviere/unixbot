@@ -22,9 +22,9 @@ be found at [https://hexdocs.pm/unixbot](https://hexdocs.pm/unixbot).
 
 ## Commands
 
-### Register
+### Subscribe
 
-Register the current channel for a daily top post.
+Subscribe the current channel for a daily top post from reddit.
 
 ### Vote
 

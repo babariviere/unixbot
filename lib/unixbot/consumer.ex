@@ -21,8 +21,14 @@ defmodule Unixbot.Consumer do
 
   @commands %{
     "subscribe" => Unixbot.Command.Subscribe,
-    "features" => Unixbot.Command.Features
+    "features" => Unixbot.Command.Features,
+    "help" => Unixbot.Command.Help
   }
+  @doc """
+  Return list of all registered commands.
+  """
+  @spec commands :: map()
+  def commands, do: @commands
 
   @impl true
   def handle_event({:MESSAGE_CREATE, %Message{content: @prefix <> content} = msg, _ws_state}) do

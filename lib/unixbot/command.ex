@@ -1,6 +1,8 @@
 defmodule Unixbot.Command do
   alias Nostrum.Struct.Message
 
+  @callback short_desc() :: String.t()
+  @callback desc() :: String.t()
   @callback execute(Arguments.t(), Message.t()) :: no_return() | Message.t()
 
   defmodule Arguments do
@@ -79,10 +81,15 @@ defmodule Unixbot.Command do
 
     {arg, rest} = parse_argument(content)
 
-    if rest == [] do
-      [arg]
-    else
-      [arg | parse_arguments(rest)]
+    cond do
+      arg == [] ->
+        []
+
+      rest == [] ->
+        [arg]
+
+      true ->
+        [arg | parse_arguments(rest)]
     end
   end
 

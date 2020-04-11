@@ -5,6 +5,12 @@ defmodule Unixbot.Command.Features do
 
   use Unixbot.Command
 
+  @impl
+  def short_desc(), do: "Show list of features that are (not) implemented."
+
+  @impl true
+  def desc(), do: short_desc()
+
   @impl true
   def execute(_args, msg) do
     embed =
