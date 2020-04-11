@@ -9,8 +9,10 @@ defmodule Unixbot.Consumer do
 
   alias Nostrum.Api
   alias Nostrum.Struct.Embed
+  alias Nostrum.Struct.Message
 
   require Logger
+  import Unixbot.Command
 
   @prefix Application.get_env(:unixbot, :prefix, "!")
 
@@ -36,15 +38,27 @@ defmodule Unixbot.Consumer do
     Enum.reduce(features, msg, fn {title, text}, embed -> Embed.put_field(embed, title, text) end)
   end
 
+  @commands %{
+    "register" => Unixbot.Command.Register
+  }
+
   @impl true
-  def handle_event({:MESSAGE_CREATE, msg, _ws_state}) do
+  def handle_event({:MESSAGE_CREATE, %Message{content: @prefix <> content} = msg, _ws_state}) do
     Logger.info("new message: #{msg.content}")
 
-    case msg.content do
-      @prefix <> "ping" -> Api.create_message(msg.channel_id, "pong")
-      @prefix <> "features" -> Api.create_message(msg.channel_id, embed: features())
+    # TODO: find a better way to register commands
+    with [command | args] <- String.split(content),
+         ce when ce != nil <- Map.get(@commands, command) do
+      ce.execute(args, msg)
+    else
       _ -> :ok
     end
+
+    # case msg.content do
+    #   @prefix <> "ping" -> Api.create_message(msg.channel_id, "pong")
+    #   @prefix <> "features" -> Api.create_message(msg.channel_id, embed: features())
+    #   _ -> :ok
+    # end
   end
 
   @impl true

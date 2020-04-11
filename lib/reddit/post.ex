@@ -3,8 +3,21 @@ defmodule Reddit.Post do
   A Reddit post without it's comments.
   """
 
-  defstruct [:id, :title, :author, :url, :permalink, :thumbnail, :score, :ups, :downs, :is_video]
-  @expected_fields ~w(id title author url permalink thumbnail score ups downs is_video)
+  defstruct [
+    :id,
+    :title,
+    :author,
+    :url,
+    :permalink,
+    :thumbnail,
+    :score,
+    :ups,
+    :downs,
+    :is_self,
+    :is_video
+  ]
+
+  @expected_fields ~w(id title author url permalink thumbnail score ups downs is_self is_video)
 
   @typedoc "Author username."
   @type author :: String.t()
@@ -25,6 +38,7 @@ defmodule Reddit.Post do
           score: integer(),
           ups: integer(),
           downs: integer(),
+          is_self: boolean(),
           is_video: boolean()
         }
 

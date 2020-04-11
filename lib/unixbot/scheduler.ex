@@ -11,6 +11,7 @@ defmodule Unixbot.Scheduler do
   """
 
   use GenServer
+  require Logger
 
   alias Crontab.Scheduler, as: CS
 
@@ -23,28 +24,13 @@ defmodule Unixbot.Scheduler do
 
     defstruct [:name, :expr, :func]
 
-    @type name :: String.t() | atom()
+    @type name() :: String.t() | atom()
 
-    @type t :: %__MODULE__{
+    @type t() :: %__MODULE__{
             name: name,
             expr: Expr.t(),
             func: function()
           }
-
-    @spec set_name(t(), name()) :: t()
-    def set_name(job, name) do
-      %{job | name: name}
-    end
-
-    @spec set_expr(t(), Expr.t()) :: t()
-    def set_expr(job, expr) do
-      %{job | expr: expr}
-    end
-
-    @spec set_func(t(), function()) :: t()
-    def set_func(job, func) do
-      %{job | func: func}
-    end
 
     @spec valid?(t()) :: boolean()
     def valid?(job) do
@@ -85,6 +71,8 @@ defmodule Unixbot.Scheduler do
   @impl true
   def handle_cast({:register, job}, state) do
     if Job.valid?(job) do
+      Logger.debug("scheduler: registering job #{job.name}")
+
       # Schedule only if does not exists (avoid duplicates)
       if not Map.has_key?(state, job.name) do
         schedule_job(job)
@@ -117,8 +105,12 @@ defmodule Unixbot.Scheduler do
     job = Map.get(state, name)
 
     if job do
+      Logger.debug("scheduler: running job #{name}")
+
       spawn(fn ->
         job.func.()
+        # avoid rescheduling the job at the same second
+        Process.sleep(1000)
         schedule_job(job)
       end)
     end
@@ -128,7 +120,7 @@ defmodule Unixbot.Scheduler do
 
   @spec schedule_job(Job.t()) :: reference()
   defp schedule_job(job) do
-    now = NaiveDateTime.utc_now()
+    now = NaiveDateTime.local_now()
     date = CS.get_next_run_date!(job.expr, now)
     diff = NaiveDateTime.diff(date, now, :millisecond)
     Process.send_after(@server, {:run, job.name}, diff)

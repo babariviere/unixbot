@@ -10,11 +10,17 @@ defmodule Unixbot.Application do
     children = [
       {Unixbot.Repo, []},
       Unixbot.Consumer,
-      Unixbot.Scheduler,
+      {Unixbot.Scheduler, %{}},
       Reddit.TokenServer
     ]
 
     opts = [strategy: :one_for_one]
-    Supervisor.start_link(children, opts)
+    res = Supervisor.start_link(children, opts)
+
+    # Reschedule all subscriptions
+    Unixbot.Repo.all(Unixbot.Subscription)
+    |> Enum.each(&Unixbot.Subscription.schedule/1)
+
+    res
   end
 end
