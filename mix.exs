@@ -51,7 +51,8 @@ defmodule Unixbot.MixProject do
   defp aliases do
     [
       lint: ["dialyzer", "credo", "inch"],
-      audit: ["hex.audit", "hex.outdated"]
+      audit: ["hex.audit", "hex.outdated"],
+      test: ["ecto.create --quiet", "ecto.migrate", "test"]
     ]
   end
 end

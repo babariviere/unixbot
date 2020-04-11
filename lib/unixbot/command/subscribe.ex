@@ -1,8 +1,8 @@
-defmodule Unixbot.Command.Register do
+defmodule Unixbot.Command.Subscribe do
   @moduledoc """
-  Register a new subscription in the given channel.
+  Subscribe a new subscription in the given channel.
 
-  Usage: register <subreddit> <time>
+  Usage: subscribe <subreddit> <time>
 
   # Parameters
 
@@ -10,19 +10,17 @@ defmodule Unixbot.Command.Register do
   time - a time to get post every day. format: <hour>:<minute>
   """
 
+  use Unixbot.Command
+
   @admin Application.get_env(:unixbot, :admin_id)
 
   alias Unixbot.Subscription
 
-  alias Nostrum.Struct.{
-    User,
-    Message
-  }
-
-  def execute([subreddit, time], %Message{author: %User{id: @admin}} = msg) do
+  @impl true
+  def execute(%Arguments{values: [subreddit, time]}, %Message{author: %User{id: @admin}} = msg) do
     [hour, minute] =
       time
-      |> String.split(":")
+      |> String.split("h")
       |> Enum.map(&String.to_integer/1)
       |> Enum.take(2)
 
@@ -58,7 +56,7 @@ defmodule Unixbot.Command.Register do
   def execute(_args, %Message{author: %User{id: @admin}} = msg) do
     Nostrum.Api.create_message!(
       msg.channel_id,
-      content: "Wrong number of arguments. Usage: register <subreddit> <hour:minute>"
+      content: "Wrong number of arguments. Usage: subscribe <subreddit> <hour:minute>"
     )
   end
 

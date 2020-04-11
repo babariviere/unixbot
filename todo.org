@@ -1,0 +1,33 @@
+* Inbox
+** TODO Commands to implement [0/2]
++ [ ] `list subscriptions`
++ [ ] `help <command>`
+
+** TODO We can have some improvement on command "framework"
+[[file:~/src/github.com/babariviere/unixbot/lib/unixbot/consumer.ex::@commands %{]]
+** TODO do proper testing
+[[file:~/src/github.com/babariviere/unixbot/test/unixbot_test.exs::alias Ecto.Adapters.SQL.Sandbox]]
+** DONE Command parsing
+Current command parsing is inflexible and kinda horrible to use.
+To replicate phoenix, we can do something like this.
+
+#+BEGIN_SRC elixir
+defmodule Unixbot.Command.Parser do
+  import Unixbot.Command
+
+  # Creates a new command scope, this can be used to create subcommand
+  scope alias: Unixbot.Command, do
+    scope "list", alias: List do
+      command "subscriptions", Subscriptions
+    end
+    command "subscribe", Subscribe
+    command "unsubscribe", Unsubscribe
+  end
+
+  # Command parsing and executing (automatically generated, i think)
+  Parser.parse(content) # this gives a nice splitted content
+  |> CommandScope.execute()
+end
+#+END_SRC
+
+[[file:~/src/github.com/babariviere/unixbot/lib/unixbot/consumer.ex::with \[command | args\] <- String.split(content),]]
