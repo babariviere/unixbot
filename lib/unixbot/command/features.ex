@@ -5,7 +5,7 @@ defmodule Unixbot.Command.Features do
 
   use Unixbot.Command
 
-  @impl
+  @impl true
   def short_desc(), do: "Show list of features that are (not) implemented."
 
   @impl true
@@ -20,8 +20,8 @@ defmodule Unixbot.Command.Features do
 
     features = [
       {"Daily top posts", "done"},
-      {"Utilities", "doing"},
-      {"Vote system", "next"},
+      {"Utilities", "done"},
+      {"Vote system", "doing"},
       {"Classement", "todo"},
       {"Extract configuration from comments", "todo"},
       {"Support for other forums ?", "idk man"}
