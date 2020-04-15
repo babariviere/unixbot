@@ -17,24 +17,46 @@ defmodule Reddit.TokenServer do
     GenServer.call(@server, :get)
   end
 
+  defmodule State do
+    @moduledoc """
+    State used for reddit token server.
+    """
+
+    defstruct [:credentials, :token]
+
+    @typedoc "State of Reddit.TokenServer"
+    @type t() :: %__MODULE__{
+            credentials: map(),
+            token: String.t() | nil
+          }
+
+    def set_token(state, token) do
+      %{state | token: token}
+    end
+  end
+
   # Server
 
   @impl true
   def init(_) do
-    token = generate_token()
-    {:ok, token}
+    state = %State{
+      credentials: Map.new(Application.get_env(:unixbot, :reddit))
+    }
+
+    token = generate_token(state.credentials)
+    {:ok, State.set_token(state, token)}
   end
 
   @impl true
-  def handle_call(:get, _from, token) do
-    {:reply, token, token}
+  def handle_call(:get, _from, %State{token: token} = state) do
+    {:reply, token, state}
   end
 
   @impl true
   def handle_info(:refresh, state) do
     # generate token in parallel to avoid blocking when getting old one.
     spawn(fn ->
-      token = generate_token()
+      token = generate_token(state.credentials)
       send(@server, {:update, token})
     end)
 
@@ -42,21 +64,24 @@ defmodule Reddit.TokenServer do
   end
 
   @impl true
-  def handle_info({:update, token}, _state) do
-    {:noreply, token}
+  def handle_info({:update, token}, state) do
+    {:noreply, State.set_token(state, token)}
   end
 
-  @credentials Application.get_env(:unixbot, :reddit)
-
-  @spec generate_token() :: String.t() | nil
-  defp generate_token() do
+  @spec generate_token(map()) :: String.t() | nil
+  defp generate_token(%{
+         username: username,
+         password: password,
+         client_id: client_id,
+         client_secret: client_secret
+       }) do
     params = [
       grant_type: "password",
-      username: @credentials[:username],
-      password: @credentials[:password]
+      username: username,
+      password: password
     ]
 
-    basic = Base.encode64("#{@credentials[:client_id]}:#{@credentials[:client_secret]}")
+    basic = Base.encode64("#{client_id}:#{client_secret}")
 
     headers = [
       Authorization: "Basic #{basic}"

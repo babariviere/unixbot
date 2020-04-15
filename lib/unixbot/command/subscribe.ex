@@ -33,7 +33,23 @@ defmodule Unixbot.Command.Subscribe do
     """
 
   @impl true
-  def execute(%Arguments{values: [subreddit, time]}, %Message{author: %User{id: @admin}} = msg) do
+  def execute(%Arguments{values: [subreddit, time]}, %Message{author: %User{id: user_id}} = msg) do
+    # TODO: this is ugly
+    if Application.get_env(:unixbot, :admin_id) == user_id do
+      create_subscription(subreddit, time, msg)
+    else
+      not_authorized(msg)
+    end
+  end
+
+  def execute(_args, msg) do
+    Nostrum.Api.create_message!(
+      msg.channel_id,
+      content: "Wrong number of arguments. Usage: subscribe <subreddit> <hour:minute>"
+    )
+  end
+
+  defp create_subscription(subreddit, time, msg) do
     [hour, minute] =
       time
       |> String.split("h")
@@ -69,14 +85,7 @@ defmodule Unixbot.Command.Subscribe do
     end
   end
 
-  def execute(_args, %Message{author: %User{id: @admin}} = msg) do
-    Nostrum.Api.create_message!(
-      msg.channel_id,
-      content: "Wrong number of arguments. Usage: subscribe <subreddit> <hour:minute>"
-    )
-  end
-
-  def execute(_args, msg) do
+  defp not_authorized(msg) do
     Nostrum.Api.create_message!(
       msg.channel_id,
       content: "You are not authorized to do this action."

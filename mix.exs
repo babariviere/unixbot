@@ -12,6 +12,13 @@ defmodule Unixbot.MixProject do
       dialyzer: [
         plt_file: {:no_warn, "priv/plts/dialyzer.plt"}
       ],
+      releases: [
+        unixbot: [
+          include_executables_for: [:unix],
+          # include_erts: false,
+          steps: [:assemble, :tar]
+        ]
+      ],
 
       # Docs
       name: "Unixbot",
@@ -39,6 +46,7 @@ defmodule Unixbot.MixProject do
       {:crontab, "~> 1.1"},
       {:ecto_sql, "~> 3.0"},
       {:postgrex, ">= 0.0.0"},
+      {:jason, "~> 1.0"},
 
       # Dev dependencies
       {:dialyxir, "~> 1.0", only: [:dev], runtime: false},
@@ -52,7 +60,9 @@ defmodule Unixbot.MixProject do
     [
       lint: ["dialyzer", "credo", "inch"],
       audit: ["hex.audit", "hex.outdated"],
-      test: ["ecto.create --quiet", "ecto.migrate", "test"]
+      test: ["ecto.create --quiet", "ecto.migrate", "test"],
+      "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
+      "ecto.reset": ["ecto.drop", "ecto.setup"]
     ]
   end
 end
