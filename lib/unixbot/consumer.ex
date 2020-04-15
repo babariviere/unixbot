@@ -22,7 +22,6 @@ defmodule Unixbot.Consumer do
   @commands %{
     "subscribe" => Unixbot.Command.Subscribe,
     "list" => Unixbot.Command.List,
-    "features" => Unixbot.Command.Features,
     "help" => Unixbot.Command.Help
   }
   @doc """

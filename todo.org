@@ -1,9 +1,9 @@
 * Inbox
-** TODO Commands to implement [0/2]
-+ [ ] `list subscriptions`
-+ [ ] `help <command>`
+** DONE Commands to implement [2/2]
++ [X] `list subscriptions`
++ [X] `help <command>`
 
-** TODO We can have some improvement on command "framework"
+** DONE We can have some improvement on command "framework"
 [[file:~/src/github.com/babariviere/unixbot/lib/unixbot/consumer.ex::@commands %{]]
 ** TODO do proper testing
 [[file:~/src/github.com/babariviere/unixbot/test/unixbot_test.exs::alias Ecto.Adapters.SQL.Sandbox]]
@@ -31,3 +31,11 @@ end
 #+END_SRC
 
 [[file:~/src/github.com/babariviere/unixbot/lib/unixbot/consumer.ex::with \[command | args\] <- String.split(content),]]
+** TODO add support to filter discord channels
+This is useful if you want multiple instance of the app and want to separate
+them.
+
+E.g one instance for testing and one for "prod"
+** TODO add voting system
+** TODO add dotfiles scraping
+** TODO add ranking
