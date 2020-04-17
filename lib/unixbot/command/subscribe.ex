@@ -12,8 +12,6 @@ defmodule Unixbot.Command.Subscribe do
 
   use Unixbot.Command
 
-  @admin Application.get_env(:unixbot, :admin_id)
-
   alias Unixbot.Subscription
 
   @impl true
