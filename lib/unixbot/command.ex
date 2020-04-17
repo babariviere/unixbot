@@ -1,9 +1,11 @@
 defmodule Unixbot.Command do
-  alias Nostrum.Struct.Message
+  @moduledoc """
+  A parsed command, similar to command line interface.
 
-  @callback short_desc() :: String.t()
-  @callback desc() :: String.t()
-  @callback execute(Arguments.t(), Message.t()) :: no_return() | Message.t()
+  See `Arguments` for all arguments accepted by a command.
+  """
+
+  alias Nostrum.Struct.Message
 
   defmodule Arguments do
     @moduledoc """
@@ -22,6 +24,10 @@ defmodule Unixbot.Command do
             params: map()
           }
   end
+
+  @callback short_desc() :: String.t()
+  @callback desc() :: String.t()
+  @callback execute(Arguments.t(), Message.t()) :: no_return() | Message.t()
 
   defmacro __using__(_args) do
     quote do

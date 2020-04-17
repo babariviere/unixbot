@@ -28,7 +28,7 @@ defmodule Reddit.Post do
   @typedoc "Permalink to post. Format: /r/_subreddit_/comments/_id_/"
   @type permalink :: String.t()
 
-  @type t :: %__MODULE__{
+  @type t() :: %__MODULE__{
           id: non_neg_integer(),
           title: String.t(),
           author: author,

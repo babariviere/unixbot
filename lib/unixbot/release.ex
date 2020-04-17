@@ -1,4 +1,8 @@
 defmodule Unixbot.Release do
+  @moduledoc """
+  Command that can be run when compiled in release mode.
+  """
+
   @app :unixbot
 
   def migrate do
