@@ -35,7 +35,7 @@ defmodule Unixbot.Command.List do
         Embed.put_field(
           embed,
           sub,
-          "Every day at #{to_string(hd(cron.hour))}h#{to_string(hd(cron.minute))}"
+          "Every day at #{format_cron(cron)}"
         )
       end)
       |> Embed.put_title("Subscriptions")
@@ -47,5 +47,21 @@ defmodule Unixbot.Command.List do
   @impl true
   def execute(_, msg) do
     Unixbot.Command.Help.execute(%Arguments{values: ["list"]}, msg)
+  end
+
+  defp format_cron(cron) do
+    hour =
+      cron.hour
+      |> hd
+      |> to_string()
+      |> String.pad_leading(2, "0")
+
+    minute =
+      cron.minute
+      |> hd
+      |> to_string()
+      |> String.pad_leading(2, "0")
+
+    "#{hour}h#{minute}"
   end
 end
