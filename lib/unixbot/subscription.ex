@@ -8,11 +8,13 @@ defmodule Unixbot.Subscription do
 
   alias Unixbot.Scheduler
   alias Unixbot.Scheduler.Job
+  alias Unixbot.Post
+  alias Unixbot.Repo
 
   alias Nostrum.Struct.Embed
 
   @type t() :: %__MODULE__{
-          channel_id: integer(),
+          channel_id: non_neg_integer(),
           cron: Crontab.CronExpression.t(),
           subreddit: String.t()
         }
@@ -30,6 +32,7 @@ defmodule Unixbot.Subscription do
     sub
     |> cast(attrs, [:channel_id, :cron, :subreddit])
     |> validate_required([:channel_id, :cron, :subreddit])
+    |> validate_number(:channel_id, greater_than: 0)
     |> validate_length(:subreddit, min: 3, max: 20)
   end
 
@@ -63,13 +66,33 @@ defmodule Unixbot.Subscription do
           %Embed{}
           |> Embed.put_title(post.title)
           |> Embed.put_description("Here is your daily porn my child.")
-          |> Embed.put_field("Score", to_string(post.score))
+          |> Embed.put_field("ID", to_string(post.id), true)
+          |> Embed.put_field("Score", to_string(post.score), true)
           |> Embed.put_color(431_948)
           |> Embed.put_url("https://reddit.com#{post.permalink}")
           |> put_media.(post)
           |> Embed.put_author("u/#{post.author}", "https://reddit.com/u/#{post.author}", nil)
 
         Nostrum.Api.create_message!(sub.channel_id, embed: msg)
+
+        post =
+          case Repo.get_by(Post, %{channel_id: sub.channel_id, reddit_post_id: post.id}) do
+            nil ->
+              %Post{}
+              |> Post.changeset(%{
+                channel_id: sub.channel_id,
+                permalink: post.permalink,
+                reddit_post_id: post.id
+              })
+              |> Repo.insert()
+
+            post ->
+              {:ok, post}
+          end
+
+        with {:ok, post} <- post do
+          Unixbot.ChannelCache.new_post(post)
+        end
       end
     end
   end

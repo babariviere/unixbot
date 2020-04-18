@@ -32,7 +32,6 @@ defmodule Unixbot.Command.Subscribe do
 
   @impl true
   def execute(%Arguments{values: [subreddit, time]}, %Message{author: %User{id: user_id}} = msg) do
-    # TODO: this is ugly
     if Application.get_env(:unixbot, :admin_id) == user_id do
       create_subscription(subreddit, time, msg)
     else

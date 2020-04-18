@@ -10,12 +10,12 @@ defmodule Unixbot.MixProject do
       deps: deps(),
       aliases: aliases(),
       dialyzer: [
-        plt_file: {:no_warn, "priv/plts/dialyzer.plt"}
+        plt_file: {:no_warn, "priv/plts/dialyzer.plt"},
+        ignore_warnings: ".dialyzer_ignore.exs"
       ],
       releases: [
         unixbot: [
           include_executables_for: [:unix],
-          # include_erts: false,
           steps: [:assemble, :tar]
         ]
       ],

@@ -10,6 +10,7 @@ defmodule Unixbot.Application do
     children = [
       {Unixbot.Repo, []},
       Unixbot.Consumer,
+      {Unixbot.ChannelCache, %{}},
       {Unixbot.Scheduler, %{}},
       Reddit.TokenServer
     ]

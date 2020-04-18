@@ -29,7 +29,7 @@ defmodule Reddit.Post do
   @type permalink :: String.t()
 
   @type t() :: %__MODULE__{
-          id: non_neg_integer(),
+          id: String.t(),
           title: String.t(),
           author: author,
           url: url | nil,

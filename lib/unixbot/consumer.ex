@@ -22,6 +22,7 @@ defmodule Unixbot.Consumer do
   @commands %{
     "subscribe" => Unixbot.Command.Subscribe,
     "list" => Unixbot.Command.List,
+    "vote" => Unixbot.Command.Vote,
     "help" => Unixbot.Command.Help
   }
   @doc """
@@ -32,7 +33,7 @@ defmodule Unixbot.Consumer do
 
   @impl true
   def handle_event({:MESSAGE_CREATE, %Message{content: @prefix <> content} = msg, _ws_state}) do
-    Logger.info("new command: #{content}")
+    Logger.debug("new command: #{content}")
 
     {cmd, args} = parse(content)
 
