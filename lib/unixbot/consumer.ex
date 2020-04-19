@@ -23,6 +23,7 @@ defmodule Unixbot.Consumer do
     "subscribe" => Unixbot.Command.Subscribe,
     "list" => Unixbot.Command.List,
     "vote" => Unixbot.Command.Vote,
+    "score" => Unixbot.Command.Score,
     "help" => Unixbot.Command.Help
   }
   @doc """
