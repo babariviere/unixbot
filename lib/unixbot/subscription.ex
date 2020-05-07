@@ -67,7 +67,7 @@ defmodule Unixbot.Subscription do
           |> Embed.put_title(post.title)
           |> Embed.put_description("Here is your daily porn my child.")
           |> Embed.put_field("ID", to_string(post.id), true)
-          |> Embed.put_field("Score", to_string(post.score), true)
+          |> Embed.put_field("Reddit Score", to_string(post.score), true)
           |> Embed.put_color(431_948)
           |> Embed.put_url("https://reddit.com#{post.permalink}")
           |> put_media.(post)
