@@ -70,7 +70,7 @@ defmodule Unixbot.Command.Vote do
 
     case vote do
       {:ok, _vote} ->
-        emoji = "✅"
+        emoji = random_emote()
         Api.create_reaction!(channel_id, message_id, emoji)
 
       {:error, changeset} ->
@@ -91,5 +91,20 @@ defmodule Unixbot.Command.Vote do
     |> Enum.reduce("", fn {k, v}, acc ->
       "- #{acc}#{k} #{hd(v)}\n"
     end)
+  end
+
+  defp random_emote do
+    alias Nostrum.Struct.Emoji
+
+    emotes = [
+      %Emoji{id: 616_348_820_158_152_764, name: "monkeyEuhh"},
+      %Emoji{id: 288_737_060_146_249_728, name: "soral"},
+      %Emoji{id: 585_751_521_199_915_008, name: "soralBof"},
+      %Emoji{id: 652_424_828_413_804_554, name: "RockNotBad"},
+      %Emoji{id: 613_804_706_984_099_916, name: "etchebestOof"},
+      %Emoji{id: 587_655_590_344_654_849, name: "kemarMind"}
+    ]
+
+    Enum.random(emotes)
   end
 end
