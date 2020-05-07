@@ -33,7 +33,7 @@ defmodule Unixbot.Command.Vote do
   @impl true
   def execute(
         %Arguments{values: [score | comment], params: params},
-        %Message{channel_id: channel_id, author: %User{id: user_id}}
+        %Message{id: message_id, channel_id: channel_id, author: %User{id: user_id}}
       ) do
     post =
       case Map.get(params, "id") do
@@ -48,13 +48,13 @@ defmodule Unixbot.Command.Vote do
           comment -> Enum.join(comment, " ")
         end
 
-      vote(score, comment, post.id, channel_id, user_id)
+      vote(score, comment, post.id, channel_id, message_id, user_id)
     else
       Api.create_message!(channel_id, content: "It looks like there is no post in this channel.")
     end
   end
 
-  defp vote(score, comment, post_id, channel_id, user_id) do
+  defp vote(score, comment, post_id, channel_id, message_id, user_id) do
     vote =
       %Vote{}
       |> Vote.changeset(%{
@@ -70,7 +70,8 @@ defmodule Unixbot.Command.Vote do
 
     case vote do
       {:ok, _vote} ->
-        Api.create_message!(channel_id, content: "Your vote is now registered my child.")
+        emoji = "✅"
+        Api.create_reaction!(channel_id, message_id, emoji)
 
       {:error, changeset} ->
         message = format_errors(changeset)
