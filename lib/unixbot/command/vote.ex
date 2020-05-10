@@ -93,18 +93,9 @@ defmodule Unixbot.Command.Vote do
     end)
   end
 
+  @emotes Application.get_env(:unixbot, :emotes, ["✅"])
+
   defp random_emote do
-    alias Nostrum.Struct.Emoji
-
-    emotes = [
-      %Emoji{id: 616_348_820_158_152_764, name: "monkeyEuhh"},
-      %Emoji{id: 288_737_060_146_249_728, name: "soral"},
-      %Emoji{id: 585_751_521_199_915_008, name: "soralBof"},
-      %Emoji{id: 652_424_828_413_804_554, name: "RockNotBad"},
-      %Emoji{id: 613_804_706_984_099_916, name: "etchebestOof"},
-      %Emoji{id: 587_655_590_344_654_849, name: "kemarMind"}
-    ]
-
-    Enum.random(emotes)
+    Enum.random(@emotes)
   end
 end
