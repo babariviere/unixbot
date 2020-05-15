@@ -44,6 +44,12 @@ defmodule Unixbot.Consumer do
   end
 
   @impl true
+  def handle_event({:MESSAGE_CREATE, %Message{content: content}, _ws_state}) do
+    Logger.debug("new message: #{content}")
+    :ok
+  end
+
+  @impl true
   def handle_event(_event) do
     :ok
   end

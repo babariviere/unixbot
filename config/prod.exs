@@ -1,6 +1,10 @@
 import Config
 
-config :logger, level: :info
+config :logger,
+  level: :info,
+  compile_time_purge_matching: [
+    [level_lower_than: :info]
+  ]
 
 config :nostrum,
   num_shards: :auto
@@ -13,9 +17,8 @@ config :unixbot,
     "RockNotBad:652424828413804554",
     "etchebestOof:613804706984099916",
     "kemarMind:587655590344654849",
-    "pepoEvil:524889908284882945",
-    "notlikenoot:585884388001316884",
+    "NotLikeNoot:648522587369897994",
     "hype:47340152364544820",
-    "SpicyOil:588431729543610368",
+    "spicyOil:357228612547641344",
     "pepeJail:585750407947747328"
   ]
